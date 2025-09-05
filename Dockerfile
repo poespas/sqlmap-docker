@@ -14,4 +14,5 @@ WORKDIR /opt/sqlmap
 RUN pip install requests urllib3
 
 WORKDIR /opt/sqlmap
-CMD ["python", "sqlmap.py", "--help"]
+ENTRYPOINT ["python", "sqlmap.py"]
+CMD ["--help"]
