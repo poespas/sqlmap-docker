@@ -1,0 +1,10 @@
+version: '3.8'
+
+services:
+  sqlmap:
+    build: .
+    volumes:
+      - ./output:/opt/sqlmap/output
+    network_mode: host
+    stdin_open: true
+    tty: true

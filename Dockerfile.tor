@@ -1,0 +1,27 @@
+FROM python:3.11-slim
+
+# Install system dependencies
+RUN apt-get update && apt-get install -y \
+    git \
+    tor \
+    curl \
+    && rm -rf /var/lib/apt/lists/*
+
+# Clone sqlmap
+RUN git clone --depth 1 https://github.com/sqlmapproject/sqlmap.git /opt/sqlmap
+
+# Install Python dependencies
+WORKDIR /opt/sqlmap
+RUN pip install requests urllib3
+
+# Configure Tor
+RUN echo "SocksPort 9050" >> /etc/tor/torrc && \
+    echo "ControlPort 9051" >> /etc/tor/torrc
+
+# Create entrypoint script
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+
+WORKDIR /opt/sqlmap
+ENTRYPOINT ["/entrypoint.sh"]
+CMD ["--help"]
